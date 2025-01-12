@@ -27,7 +27,7 @@ func (s *UserService) CreateUser(ctx *gin.Context, req dtos.CreateUserRequest) {
 	if err != nil {
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessResponses{Message: "SUCCESS", StatusCode: http.StatusOK})
+	utils.SuccessResponse(ctx)
 }
 
 func (s *UserService) GetUserByID(id int, ctx *gin.Context) {
@@ -40,24 +40,14 @@ func (s *UserService) GetUserByID(id int, ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, utils.Responses{Data: user, Message: "OK"})
 }
 
-func (s *UserService) UpdateUser(id uint, req dtos.UpdateUserRequest) (*models.User, error) {
-	user, err := s.userRepo.FindByID(id)
+func (s *UserService) UpdateUser(ctx *gin.Context, id uint, req dtos.UpdateUserRequest) {
+	user, _ := s.userRepo.FindByID(id)
+
+	err := s.userRepo.Update(user)
 	if err != nil {
-		return nil, err
+		return
 	}
-
-	if req.Name != "" {
-		user.Name = req.Name
-	}
-	if req.Description != "" {
-		user.Description = req.Description
-	}
-
-	if err := s.userRepo.Update(user); err != nil {
-		return nil, err
-	}
-
-	return user, nil
+	utils.SuccessResponse(ctx)
 }
 
 func (s *UserService) ListUsers(ctx *gin.Context, req dtos.ListUsersRequest) {

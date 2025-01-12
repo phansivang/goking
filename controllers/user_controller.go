@@ -5,7 +5,6 @@ import (
 	"goking/dtos"
 	"goking/services"
 	"goking/utils"
-	"net/http"
 	"strconv"
 )
 
@@ -32,25 +31,9 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	var updateUserReq dtos.UpdateUserRequest
-	if err := ctx.ShouldBindJSON(&updateUserReq); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	utils.BindJson(ctx, &updateUserReq)
 
-	user, err := c.userService.UpdateUser(uint(id), updateUserReq)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	userResponse := dtos.UserResponse{
-		ID:          user.ID,
-		Name:        user.Name,
-		Description: user.Description,
-		CreatedAt:   user.CreatedAt,
-	}
-
-	ctx.JSON(http.StatusOK, userResponse)
+	c.userService.UpdateUser(ctx, uint(id), updateUserReq)
 }
 
 func (c *UserController) ListUsers(ctx *gin.Context) {

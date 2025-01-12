@@ -25,7 +25,7 @@ func (r *UserRepository) FindByID(id uint) (*models.User, error) {
 }
 
 func (r *UserRepository) Update(user *models.User) error {
-	return r.db.Save(user).Error
+	return r.db.Updates(user).Error
 }
 
 func (r *UserRepository) Delete(id uint) error {
