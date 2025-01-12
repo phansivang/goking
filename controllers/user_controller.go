@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"goking/dtos"
 	"goking/services"
+	"goking/utils"
 	"net/http"
 	"strconv"
 )
@@ -18,24 +19,8 @@ func NewUserController(userService *services.UserService) *UserController {
 
 func (c *UserController) CreateUser(ctx *gin.Context) {
 	var createUserReq dtos.CreateUserRequest
-	if err := ctx.ShouldBindJSON(&createUserReq); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	user, err := c.userService.CreateUser(createUserReq)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	userResponse := dtos.UserResponse{
-		Name:        user.Name,
-		Description: user.Description,
-		CreatedAt:   user.CreatedAt,
-	}
-
-	ctx.Set("Data", userResponse)
+	utils.BindJson(ctx, &createUserReq)
+	c.userService.CreateUser(ctx, createUserReq)
 }
 
 func (c *UserController) GetUserByID(ctx *gin.Context) {
@@ -70,5 +55,6 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 
 func (c *UserController) ListUsers(ctx *gin.Context) {
 	var listUsersReq dtos.ListUsersRequest
+	utils.BindQuery(ctx, &listUsersReq)
 	c.userService.ListUsers(ctx, listUsersReq)
 }

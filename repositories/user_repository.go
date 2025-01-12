@@ -32,11 +32,12 @@ func (r *UserRepository) Delete(id uint) error {
 	return r.db.Delete(&models.User{}, id).Error
 }
 
-func (r *UserRepository) List(req dtos.ListUsersRequest) []models.User {
+func (r *UserRepository) FindAll(req dtos.ListUsersRequest) []models.User {
 	var users []models.User
-
+	offset := (req.Page - 1) * req.Limit
 	query := r.db.Model(&models.User{})
 
+	/* FILTER CRITERIA */
 	if req.ID != 0 {
 		query = query.Where("id = ?", req.ID)
 	}
@@ -52,9 +53,10 @@ func (r *UserRepository) List(req dtos.ListUsersRequest) []models.User {
 		query = query.Where("created_at BETWEEN ? AND ?", req.StartDate, req.EndDate)
 	}
 
-	offset := (req.Page - 1) * req.Limit
-
-	query.Offset(offset).Limit(req.Limit).Find(&users)
+	/* PAGINATION */
+	query.Offset(offset)
+	query.Limit(req.Limit)
+	query.Find(&users)
 
 	return users
 }
