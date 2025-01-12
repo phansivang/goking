@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"goking/dtos"
-	"goking/services"
-	"goking/utils"
+	"goking/pkg/dtos"
+	"goking/pkg/services"
+	"goking/pkg/utils"
 	"strconv"
 )
 

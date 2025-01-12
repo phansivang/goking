@@ -2,17 +2,17 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"goking/config"
-	"goking/controllers"
-	"goking/models"
-	"goking/repositories"
-	"goking/routes"
-	"goking/services"
+	"goking/pkg/config"
+	"goking/pkg/controllers"
+	models2 "goking/pkg/models"
+	"goking/pkg/repositories"
+	"goking/pkg/routes"
+	"goking/pkg/services"
 )
 
 func main() {
 	config.ConnectDB()
-	config.DB.AutoMigrate(&models.User{}, &models.UserProfile{})
+	config.DB.AutoMigrate(&models2.User{}, &models2.UserProfile{})
 
 	userRepo := repositories.NewUserRepository(config.DB)
 

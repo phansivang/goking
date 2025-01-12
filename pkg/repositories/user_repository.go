@@ -1,9 +1,10 @@
 package repositories
 
 import (
-	"goking/dtos"
-	"goking/models"
+	"goking/pkg/dtos"
+	"goking/pkg/models"
 	"gorm.io/gorm"
+	"log"
 )
 
 type UserRepository struct {
@@ -42,6 +43,7 @@ func (r *UserRepository) FindAll(req dtos.ListUsersRequest) []models.User {
 		query = query.Where("id = ?", req.ID)
 	}
 
+	log.Printf(req.Name)
 	if req.Name != "" {
 		query = query.Where("name LIKE ?", "%"+req.Name+"%")
 	}

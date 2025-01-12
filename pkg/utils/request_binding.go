@@ -17,7 +17,7 @@ func BindQuery(ctx *gin.Context, obj interface{}) bool {
 
 func BindJson(ctx *gin.Context, obj interface{}) bool {
 	if err := ctx.ShouldBindJSON(obj); err != nil {
-		log.Printf("Query binding error: %v", err)
+		log.Printf("Json binding error: %v", err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid Payload"})
 		return false
 	}

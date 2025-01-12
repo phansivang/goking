@@ -2,10 +2,10 @@ package services
 
 import (
 	"github.com/gin-gonic/gin"
-	"goking/dtos"
-	"goking/models"
-	"goking/repositories"
-	"goking/utils"
+	"goking/pkg/dtos"
+	"goking/pkg/models"
+	"goking/pkg/repositories"
+	utils2 "goking/pkg/utils"
 	"net/http"
 )
 
@@ -27,17 +27,17 @@ func (s *UserService) CreateUser(ctx *gin.Context, req dtos.CreateUserRequest) {
 	if err != nil {
 		return
 	}
-	utils.SuccessResponse(ctx)
+	utils2.SuccessResponse(ctx)
 }
 
 func (s *UserService) GetUserByID(id int, ctx *gin.Context) {
 	user, err := s.userRepo.FindByID(uint(id))
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, utils.ErrorResponse{Message: "user not found", StatusCode: http.StatusNotFound})
+		ctx.JSON(http.StatusNotFound, utils2.ErrorResponse{Message: "user not found", StatusCode: http.StatusNotFound})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, utils.Responses{Data: user, Message: "OK"})
+	ctx.JSON(http.StatusOK, utils2.Responses{Data: user, Message: "OK"})
 }
 
 func (s *UserService) UpdateUser(ctx *gin.Context, id uint, req dtos.UpdateUserRequest) {
@@ -47,7 +47,7 @@ func (s *UserService) UpdateUser(ctx *gin.Context, id uint, req dtos.UpdateUserR
 	if err != nil {
 		return
 	}
-	utils.SuccessResponse(ctx)
+	utils2.SuccessResponse(ctx)
 }
 
 func (s *UserService) ListUsers(ctx *gin.Context, req dtos.ListUsersRequest) {
@@ -55,5 +55,5 @@ func (s *UserService) ListUsers(ctx *gin.Context, req dtos.ListUsersRequest) {
 
 	users := s.userRepo.FindAll(req)
 
-	ctx.JSON(http.StatusOK, utils.Responses{Data: users, Message: "SUCCESS", Limit: limit, Offset: offset})
+	ctx.JSON(http.StatusOK, utils2.Responses{Data: users, Message: "SUCCESS", Limit: limit, Offset: offset})
 }

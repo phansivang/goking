@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"goking/controllers"
+	"goking/pkg/controllers"
 )
 
 func SetupUserRoutes(router *gin.Engine, userController *controllers.UserController) {
